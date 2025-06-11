@@ -10,7 +10,7 @@ function getUserIdFromRequest(req: NextRequest) {
   if (!auth) return null;
   const token = auth.replace("Bearer ", "");
   const payload = verifyToken(token);
-  return payload?.id || payload?.userId || null;
+  return payload?.id || null;
 }
 
 export async function POST(req: NextRequest) {

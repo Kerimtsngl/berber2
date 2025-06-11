@@ -11,37 +11,56 @@ import {
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 import { addDays, format, isSameDay } from "date-fns";
-import tr from "date-fns/locale/tr";
+import { tr } from "date-fns/locale/tr";
+import { useRouter } from "next/navigation";
 
 export default function AppointmentsPage() {
   const [services, setServices] = useState([]);
   const [slots, setSlots] = useState([]);
   const [serviceId, setServiceId] = useState("");
   const [slotId, setSlotId] = useState("");
-  const [appointments, setAppointments] = useState([]);
+  const [appointments, setAppointments] = useState<{ data?: any[], error?: string }>({});
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    setLoading(true);
     const token = localStorage.getItem("token");
-    Promise.all([
-      fetch("/api/services").then(res => res.json()),
-      fetch("/api/timeslots").then(res => res.json()),
-    ]).then(([services, slots]) => {
-      setServices(services);
-      setSlots(slots);
-      if (token) {
-        fetch("/api/appointments", { headers: { Authorization: `Bearer ${token}` } })
-          .then(res => res.json()).then(setAppointments).finally(() => setLoading(false));
-      } else {
-        setLoading(false);
-      }
-    });
+    if (!token) {
+      router.push("/auth/login");
+      return;
+    }
+    setLoading(true);
+    fetch("/api/appointments", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          setAppointments({ error: data.error });
+        } else {
+          setAppointments({ data: data });
+        }
+      })
+      .catch(() => setAppointments({ error: "Randevular yüklenemedi." }))
+      .finally(() => setLoading(false));
+  }, [router]);
+
+  useEffect(() => {
+    fetch("/api/services")
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          setError(data.error);
+        } else {
+          setServices(data);
+        }
+      })
+      .catch(() => setError("Hizmetler yüklenemedi."));
   }, []);
 
   useEffect(() => {
@@ -86,7 +105,10 @@ export default function AppointmentsPage() {
       body: JSON.stringify({ id, status: "REJECTED" }),
     });
     if (res.ok) {
-      setAppointments((prev: any[]) => prev.map(a => a.id === id ? { ...a, status: "REJECTED" } : a));
+      setAppointments(prev => ({
+        ...prev,
+        data: prev.data?.map(a => a.id === id ? { ...a, status: "REJECTED" } : a)
+      }));
     }
   }
 
@@ -98,7 +120,10 @@ export default function AppointmentsPage() {
       body: JSON.stringify({ id }),
     });
     if (res.ok) {
-      setAppointments((prev: any[]) => prev.filter(a => a.id !== id));
+      setAppointments(prev => ({
+        ...prev,
+        data: prev.data?.filter(a => a.id !== id)
+      }));
     }
   }
 
@@ -270,21 +295,21 @@ export default function AppointmentsPage() {
         </h3>
         {loading ? (
           <div className="flex justify-center py-8">
-            <ArrowPathIcon className="w-8 h-8 animate-spin text-blue-500" />
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
           </div>
-        ) : !Array.isArray(appointments) ? (
+        ) : appointments.error ? (
           <div className="flex flex-col items-center gap-2 text-red-500 py-8">
             <XCircleIcon className="w-6 h-6" />
-            {appointments?.error ? appointments.error : "Randevular yüklenemedi."}
+            {appointments.error}
           </div>
-        ) : appointments.length === 0 ? (
+        ) : !appointments.data || appointments.data.length === 0 ? (
           <div className="flex flex-col items-center gap-2 text-gray-400 py-8">
             <CalendarDaysIcon className="w-10 h-10" />
-            Henüz randevunuz yok.
+            <span>Henüz randevunuz bulunmuyor.</span>
           </div>
         ) : (
           <ol className="relative border-l-4 border-blue-200 ml-4 space-y-8">
-            {appointments.map((a: any, i: number) => (
+            {appointments.data.map((a: any, i: number) => (
               <li key={a.id} className="ml-4">
                 <div className="absolute -left-6 top-2 bg-blue-100 border-4 border-white rounded-full w-8 h-8 flex items-center justify-center shadow">
                   <CheckCircleIcon className="w-5 h-5 text-blue-500" />
