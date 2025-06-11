@@ -1,0 +1,33 @@
+{
+  "name": "berber-randevu-sistemi",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "prisma": "prisma",
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@prisma/client": "^6.9.0",
+    "bcryptjs": "^2.4.3",
+    "date-fns": "^4.1.0",
+    "jsonwebtoken": "^9.0.0",
+    "next": "^15.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "sqlite3": "^5.1.6",
+    "swiper": "^11.2.8",
+    "tailwindcss": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.30",
+    "@types/react": "19.1.6",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "prisma": "^6.0.0",
+    "typescript": "5.8.3"
+  }
+}

@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  phone     String?
+  profileImage String?
+  isBanned  Boolean  @default(false)
+  role      Role     @default(NORMAL)
+  messagesSent     Message[] @relation("SentMessages")
+  messagesReceived Message[] @relation("ReceivedMessages")
+  appointments     Appointment[]
+  events          Event[]
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  senderId  Int
+  receiverId Int
+  content   String
+  createdAt DateTime @default(now())
+  sender    User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver  User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  isHidden  Boolean  @default(false)
+}
+
+model Appointment {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  serviceId Int
+  timeSlotId Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  service   Service  @relation(fields: [serviceId], references: [id])
+  timeSlot  TimeSlot @relation(fields: [timeSlotId], references: [id])
+  status    AppointmentStatus @default(PENDING)
+}
+
+model Service {
+  id        Int      @id @default(autoincrement())
+  name      String
+  price     Float
+  appointments Appointment[]
+}
+
+model TimeSlot {
+  id        Int      @id @default(autoincrement())
+  start     DateTime
+  end       DateTime
+  isAvailable Boolean @default(true)
+  appointments Appointment[]
+}
+
+model Event {
+  id        Int      @id @default(autoincrement())
+  type      String   // ör: appointment_created, appointment_cancelled, message_sent
+  message   String
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  isHidden  Boolean  @default(false)
+}
+
+enum Role {
+  ADMIN
+  NORMAL
+}
+
+enum AppointmentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+} 

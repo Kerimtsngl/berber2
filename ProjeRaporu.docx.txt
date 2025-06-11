@@ -1,0 +1,120 @@
+PROJE ÖDEV RAPORU
+=================
+
+Kuaför/Barber Randevu ve Yönetim Sistemi
+
+---
+
+1. Proje Konusu ve Amacı
+------------------------
+Bu projenin temel konusu, berber ve kuaför salonları için dijital bir randevu ve yönetim sistemi geliştirmektir. Geleneksel yöntemlerle yürütülen randevu takibi, müşteri yönetimi ve hizmet planlaması süreçlerinde yaşanan aksaklıklar, zaman kaybı ve iletişim problemleri, bu projenin çıkış noktasını oluşturmuştur. Özellikle küçük ve orta ölçekli işletmelerde, randevu defterlerinin kaybolması, çakışan randevular, müşteri bilgilerinin dağınık tutulması gibi sorunlar sıkça yaşanmaktadır. Proje ile birlikte, hem işletme sahiplerinin hem de müşterilerin işini kolaylaştıracak, hatasız ve hızlı bir randevu yönetimi sağlanması hedeflenmiştir. Ayrıca, sistemin kullanıcılar arası mesajlaşma ve bildirim altyapısı ile zenginleştirilmesi, iletişimi ve yönetimi daha etkin hale getirmektedir. Proje, kullanıcı dostu bir arayüz ile hem müşterilerin hem de işletme sahiplerinin dijitalleşme sürecine kolayca adapte olmasını amaçlamaktadır. 
+
+Sistemin temel amacı, randevu süreçlerini dijitalleştirerek manuel hataları en aza indirmek, müşteri memnuniyetini artırmak ve işletme sahiplerine zaman kazandırmaktır. Ayrıca, rol tabanlı erişim ile güvenli bir yönetim paneli sunulmakta, adminler için hizmet, saat, kullanıcı ve randevu yönetimi kolaylaştırılmaktadır. Bildirim sistemi sayesinde önemli olaylar anlık olarak admin paneline düşmekte, böylece yöneticiler sistemdeki gelişmelerden haberdar olabilmektedir.
+
+2. Planlama ve Geliştirme Süreci
+-------------------------------
+Proje geliştirme süreci, yazılım geliştirme yaşam döngüsüne uygun olarak aşamalı ve sistematik bir şekilde yürütülmüştür. İlk olarak, hedef kullanıcı kitlesi ve onların ihtiyaçları analiz edilmiştir. Berber ve kuaför salonlarının günlük operasyonlarında karşılaştıkları problemler, müşteri ve işletme sahibi görüşmeleriyle tespit edilmiştir. Bu analiz sonucunda, randevu yönetimi, hizmet ve saat planlaması, kullanıcı yönetimi, mesajlaşma ve bildirim gibi temel gereksinimler ortaya konmuştur.
+
+Teknoloji seçimi aşamasında, modern, ölçeklenebilir ve sürdürülebilir bir yapı için Next.js, Prisma ORM, SQLite ve Tailwind CSS tercih edilmiştir. Next.js'in tam stack yapısı sayesinde hem frontend hem de backend kodları tek bir projede toplanmış, geliştirme ve bakım süreçleri kolaylaştırılmıştır. Prisma ORM ile veritabanı işlemleri tip güvenli ve hızlı bir şekilde gerçekleştirilmiş, SQLite ise geliştirme sürecinde hızlı ve pratik bir veritabanı çözümü sunmuştur. Tailwind CSS ile modern ve responsive bir arayüz tasarlanmıştır.
+
+Veritabanı tasarımı aşamasında, kullanıcı, hizmet, randevu, saat dilimi, mesaj ve bildirim (event) tabloları detaylıca modellenmiştir. Özellikle kullanıcı-rol ilişkisi, kullanıcı-mesaj ve kullanıcı-randevu ilişkileri dikkatlice planlanmıştır. Her bir tablo için gerekli alanlar ve ilişkiler Prisma şeması üzerinde tanımlanmış, migration işlemleriyle veritabanına uygulanmıştır.
+
+Geliştirme süreci, modüler bir yaklaşımla ilerlemiştir. Öncelikle temel kullanıcı yönetimi ve kimlik doğrulama işlemleri geliştirilmiş, ardından admin paneli ve yönetim modülleri eklenmiştir. Randevu ve hizmet yönetimi, saat planlaması, mesajlaşma ve bildirim altyapısı sırasıyla projeye entegre edilmiştir. Her modülün geliştirilmesinden sonra kapsamlı testler yapılmış, kullanıcı ve admin rollerinin yetkileri kontrol edilmiştir. Son aşamada, responsive arayüz ve kullanıcı deneyimi iyileştirmeleri yapılmıştır.
+
+Proje bireysel olarak geliştirilmiştir. Tüm analiz, tasarım, kodlama ve test süreçleri tek kişi tarafından yürütülmüştür. Geliştirme sürecinde düzenli olarak dökümantasyon tutulmuş, karşılaşılan sorunlar ve çözümleri not edilmiştir.
+
+3. Modüller ve İşlevleri
+------------------------
+Proje, aşağıdaki temel modüllerden oluşmaktadır ve her bir modül, sistemin bütünsel işleyişine katkı sağlamaktadır:
+
+3.1. Kullanıcı Yönetimi
+- Kayıt, giriş, profil güncelleme, şifre değiştirme
+- Rol yönetimi (admin/normal kullanıcı)
+- Kullanıcı engelleme ve silme
+
+3.2. Hizmet Yönetimi
+- Admin tarafından hizmet ekleme, düzenleme ve silme
+- Hizmetlerin fiyatlandırılması
+
+3.3. Randevu Yönetimi
+- Kullanıcıların uygun saat ve hizmet seçerek randevu alması
+- Adminin randevuları onaylama, reddetme ve silme işlemleri
+- Randevu saatlerinin yönetimi ve çakışmaların önlenmesi
+
+3.4. Saat Yönetimi
+- Adminin randevu saatlerini belirlemesi, yeni saat dilimleri eklemesi veya silmesi
+
+3.5. Mesajlaşma Modülü
+- Kullanıcılar arası birebir mesaj gönderme ve alma
+- Admin panelinde mesajların yönetimi (gizle, sil)
+
+3.6. Bildirimler (Event) Modülü
+- Yeni kullanıcı kaydı ve randevu alımı gibi önemli olayların admin paneline bildirim olarak düşmesi
+- Bildirimlerin panelden gizlenmesi veya tamamen silinmesi
+
+4. Kodlama Yapısı
+-----------------
+
+4.1. Kullanılan Teknolojiler
+- **Next.js:** React tabanlı, tam stack uygulama geliştirme framework'ü. Sayfa yönlendirmeleri, API route'ları ve sunucu tarafı işlemler tek projede toplanmıştır.
+- **Prisma ORM:** Veritabanı işlemlerini kolaylaştıran, tip güvenli ve modern bir ORM. Migration, seed ve query işlemleri hızlı ve güvenli şekilde yapılır.
+- **SQLite:** Geliştirme ve küçük ölçekli projeler için hızlı ve pratik bir veritabanı çözümü sunar. İstenirse PostgreSQL veya MySQL gibi farklı veritabanlarına kolayca geçiş yapılabilir.
+- **Tailwind CSS:** Hızlı ve modern arayüz geliştirme için utility-first CSS framework'ü. Responsive ve şık tasarımlar kolayca oluşturulabilir.
+- **TypeScript:** Tip güvenliği ve daha iyi kod kalitesi için kullanılmıştır. Hataların erken aşamada tespit edilmesini sağlar.
+- **Ek Kütüphaneler:** @heroicons/react (ikonlar), bcryptjs (şifreleme), date-fns (tarih işlemleri), jsonwebtoken (JWT ile kimlik doğrulama), swiper (slider bileşenleri için)
+
+4.2. Dosya ve Klasör Yapısı
+- `app/` : Sayfalar, API route'ları ve client component'ler
+  - `admin/` : Admin paneli ve yönetim sayfaları
+  - `api/` : Backend API endpoint'leri (ör. kullanıcı, randevu, mesaj, event)
+  - `auth/` : Kayıt ve giriş sayfaları
+  - `messages/`, `appointments/`, `services/` : İlgili modül sayfaları
+- `prisma/` : Veritabanı şeması (`schema.prisma`) ve migration dosyaları
+- `lib/` : Ortak yardımcı fonksiyonlar (ör. prisma client, kimlik doğrulama işlemleri) burada yer alır.
+- `public/` : Statik dosyalar (favicon, görseller) bu klasörde bulunur.
+- `styles/` : Tailwind ve global CSS dosyaları burada yer alır.
+
+4.3. Proje Mimarisi
+- Next.js app directory yapısı ile modüler ve okunabilir bir kod tabanı
+- API route'ları ile backend işlemleri
+- Rol tabanlı erişim kontrolü, her endpoint'te ve sayfada titizlikle uygulanmıştır.
+- State yönetimi için React hook'ları
+- Responsive ve kullanıcı dostu arayüz
+
+5. Kazanımlar ve Değerlendirme
+------------------------------
+Bu proje ile tam stack bir uygulamanın planlanması, geliştirilmesi ve yönetilmesi konularında önemli deneyimler kazandım. Özellikle Next.js app directory yapısı, Prisma ile migration yönetimi, rol tabanlı erişim ve bildirim sistemleri hakkında pratik bilgiler edindim. Proje sürecinde karşılaşılan başlıca zorluklar şunlardı:
+- Veritabanı migration ve schema güncellemelerinde yaşanan hatalar. Özellikle yeni alanlar eklenirken eski verilerin korunması ve migration işlemlerinin sorunsuz çalışması için ek önlemler alınması gerekti.
+- Rol yönetimi ve erişim kontrolünün doğru şekilde uygulanması. Admin ve normal kullanıcı rollerinin ayrımı, her endpoint'te yetki kontrolü yapılması, güvenlik açıklarının önlenmesi için dikkatli bir şekilde tasarlandı.
+- Bildirimlerin kalıcı ve güvenli şekilde saklanması. Bildirimlerin hem veritabanında hem de frontend tarafında doğru şekilde yönetilmesi için ek API endpoint'leri ve state yönetimi fonksiyonları geliştirildi.
+- Responsive arayüzde mobil ve masaüstü uyumluluğu. Farklı cihazlarda kullanıcı deneyiminin tutarlı olması için Tailwind CSS'in responsive utility'leri yoğun şekilde kullanıldı.
+
+Tüm bu süreçler sonunda, modern ve işlevsel bir yönetim paneli geliştirme konusunda önemli bir tecrübe elde ettim. Proje, gerçek bir işletmede kullanılabilecek düzeyde, ölçeklenebilir ve sürdürülebilir bir altyapıya sahiptir. Ayrıca, yazılım geliştirme sürecinde karşılaşılan sorunların çözümünde araştırma yapma, dökümantasyon okuma ve topluluk desteğinden yararlanma konularında da kendimi geliştirdim.
+
+6. Bileşenlerin Genel İşleyişi
+-----------------------------
+
+6.1. Admin Paneli
+- Giriş yapan admin, kullanıcı, hizmet, randevu, mesaj ve bildirim yönetimini tek ekrandan yapabilir.
+- Bildirimler panelde listelenir, gizlenebilir veya silinebilir.
+- Kullanıcı yönetimi, rol değiştirme, engelleme ve silme işlemleri kolayca yapılabilir.
+- Hizmet ve randevu saatleri yönetimi hızlı ve pratiktir.
+
+6.2. Kullanıcı Paneli
+- Kullanıcılar kolayca randevu alabilir, geçmiş ve mevcut randevularını görebilir.
+- Diğer kullanıcılarla mesajlaşabilir.
+
+6.3. Mesajlaşma
+- Kullanıcılar arası birebir mesajlar, admin panelinde de yönetilebilir.
+- Mesajlar gizlenebilir veya silinebilir.
+
+6.4. Bildirimler
+- Yeni kullanıcı kaydı ve randevu alımı gibi önemli olaylar otomatik olarak admin paneline bildirim olarak düşer.
+- Admin bu bildirimleri gizleyebilir veya silebilir.
+
+6.5. Responsive Tasarım
+- Tüm sayfalar ve bileşenler mobil, tablet ve masaüstü cihazlarda sorunsuz çalışacak şekilde tasarlanmıştır.
+
+---
+
+Bu rapor, Kuaför/Barber Randevu ve Yönetim Sistemi projesinin tüm teknik ve işlevsel detaylarını kapsamaktadır. Proje, modern web teknolojileriyle geliştirilmiş, ölçeklenebilir ve kullanıcı dostu bir randevu yönetim sistemi sunmaktadır. 
